@@ -4,11 +4,5 @@ export default class Farmer {
         farmer,
         production,
         date
-    ) {
-        this.id = id]
-        this.farmer = farmer
-    }
-    getId() {
-        return id
-    }
+    ) {}
 }
