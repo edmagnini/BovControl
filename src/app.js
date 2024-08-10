@@ -2,13 +2,14 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 const swaggerUI = require("swagger-ui-express")
+const swaggerDocument = require("../swagger.json")
 
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup())
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 const server = app.listen(process.env.PORT || 3003, () => {
     if (server) {

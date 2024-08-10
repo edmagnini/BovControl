@@ -1,0 +1,8 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Products",
+      "description": "Documentation from products api",
+      "version": "1.0.0"
+    }
+}
