@@ -1,8 +1,13 @@
-export default class Farmer {
+class Farmer {
     constructor(
-        id,
         name,
         email,
-        password,
-    ) {}
+        password
+    ) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
+
+module.exports = Farmer

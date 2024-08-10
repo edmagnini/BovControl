@@ -1,8 +1,13 @@
-export default class Farmer {
+class MilkProduction {
     constructor(
-        id,
-        farmer,
-        production,
+        farm,
+        quantity,
         date
-    ) {}
+    ) {
+        this.farm = farm;
+        this.quantity = quantity;
+        this.date = date;
+    }
 }
+
+module.exports = MilkProduction

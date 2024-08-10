@@ -1,8 +1,19 @@
-export default class Farmer {
+class Farm {
     constructor(
-        id,
         name,
-        code,
-        farmer
-    ) {}
+        farmCode,
+        farmer,
+        addres,
+        latitude,
+        longitude
+    ) {
+        this.name = name;
+        this.farmCode = farmCode;
+        this.farmer = farmer;
+        this.addres = addres
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }
+
+module.exports = Farm
