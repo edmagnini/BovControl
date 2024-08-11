@@ -48,7 +48,6 @@ class FarmerBusiness {
             throw new CustomError(404, "Invalid credentials")
         }
         const token = new Authenticator().generateToken({ id: checkEmail._id.toHexString() })
-        const checkToken = new Authenticator().getTokenData(token)
         return { jwtToken: `Bearer ${token}` }
     }
     async getFarmer(poyload) {

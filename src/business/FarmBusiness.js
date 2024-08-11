@@ -19,7 +19,7 @@ class FarmBusiness {
         if (!farm.name || !farm.farmCode || !farm.farmer || !farm.address || !farm.latitude || !farm.longitude) {
             throw new CustomError(422,"Invalid farm data");
         }
-        const checkFarmer = await new FarmerBaseDatabase().getFarmerById(!farm.farmer)
+        const checkFarmer = await new FarmerBaseDatabase().getFarmerById(farm.farmer)
         if (!checkFarmer) {
             throw new CustomError(422, "Farmer not found")
         }

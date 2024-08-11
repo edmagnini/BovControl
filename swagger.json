@@ -1,49 +1,725 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Products",
-    "description": "Documentation milk production API",
+    "title": "Farmer API",
+    "description": "API for managing farmers, including registration, login, and fetching details.",
     "version": "1.0.0"
   },
-  "basePath": "/",
-
-  "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    }
-  },
-
   "paths": {
-    "/products/findByName": {
-      "get": {
-        "description": "Rota que busca produto pelo nome",
-        "sumary": "Busca de um produto pelo nome",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "name",
-            "type": "string",
-            "required": true
-          }
+    "/farmer/register": {
+      "post": {
+        "summary": "Register a new farmer",
+        "description": "Endpoint to register a new farmer. Returns the details of the newly created farmer.",
+        "tags": [
+          "Farmer"
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Irineu Santos"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "irineuson@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "66b6d306e2566984fe8002e4"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Farmer successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acknowledged": {
+                      "type": "boolean"
+                    },
+                    "insertedId": {
+                      "type": "string",
+                      "example": "66b8393cee661372425565de"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid input data"
+          },
+          "409": {
+            "description": "Email already exists"
           }
         }
       }
     },
-
-    "/product": {
+    "/farmer/login": {
       "post": {
-        "tags": ["Products"],
-        "security": [{"bearerAuth": []}],
+        "summary": "Farmer login",
+        "description": "Endpoint for farmer login. Returns a JWT token if credentials are valid.",
+        "tags": [
+          "Farmer"
+        ],
         "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "irineu@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "1234@"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JWT token successfully generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jwtToken": {
+                      "type": "string",
+                      "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YjdlOWY2NDMxYWQ2MGY2NzY5M2E1OSIsImlhdCI6MTcyMzM0ODM4NiwiZXhwIjoxNzIzMzQ4OTg2fQ.3UTc8EBg7Fxe0Yybd4SEXTp_L9z4D5OxbiAx65L5dNM"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "422": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/farmer": {
+      "get": {
+        "summary": "Get farmer details",
+        "description": "Endpoint to get farmer details by ID.",
+        "tags": [
+          "Farmer"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "66b8393cee661372425565de"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Farmer details successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Invalid ID format"
+          }
+        }
+      }
+    },
+    "/farm/register": {
+      "post": {
+        "summary": "Register a new farm",
+        "description": "Endpoint to register a new farm. Returns the details of the newly created farm.",
+        "tags": [
+          "Farm"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Farm A"
+                  },
+                  "farmCode": {
+                    "type": "string",
+                    "example": "FARM123"
+                  },
+                  "farmer": {
+                    "type": "string",
+                    "example": "66b8393cee661372425565de"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "123 Farm Lane"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "example": 40.712776
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "example": -74.005974
+                  }
+                },
+                "required": [
+                  "name",
+                  "farmCode",
+                  "farmer",
+                  "address",
+                  "latitude",
+                  "longitude"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Farm successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acknowledged": {
+                      "type": "boolean"
+                    },
+                    "insertedId": {
+                      "type": "string",
+                      "example": "66b8393cee661372425565de"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid farm data"
+          },
+          "404": {
+            "description": "Farmer not found"
+          }
+        }
+      }
+    },
+    "/farm/get": {
+      "post": {
+        "summary": "Get farm details",
+        "description": "Endpoint to get farm details by ID. Requires authentication.",
+        "tags": [
+          "Farm"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "66b8393cee661372425565de"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Farm details successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "farmCode": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "422": {
+            "description": "Invalid ID format"
+          }
+        }
+      }
+    },
+    "/dailyProduction": {
+      "post": {
+        "summary": "Create Daily Milk Production",
+        "operationId": "createDailyMilkProduction",
+        "tags": [
+          "MilkProduction"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Daily milk production data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "date",
+                  "quantity"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Daily milk production created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Farmer not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/milkDelivery": {
+      "patch": {
+        "summary": "Set Milk Delivery",
+        "operationId": "setMilkDelivery",
+        "tags": [
+          "MilkProduction"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Milk delivery data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "date",
+                  "quantity"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Milk delivery set successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Farmer not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/dailyAndMonthlyProduction": {
+      "get": {
+        "summary": "Get Daily and Monthly Production",
+        "operationId": "getDailyAndMonthlyProduction",
+        "tags": [
+          "MilkProduction"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Request for daily and monthly milk production data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "farmId": {
+                    "type": "string"
+                  },
+                  "month": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "farmId",
+                  "month"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Daily and monthly production data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dailyProduction": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "date": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "quantity": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "monthlyProduction": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "date": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "quantity": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Farmer not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/priceForMonth": {
+      "get": {
+        "summary": "Get Price for Month",
+        "operationId": "getPriceForMonth",
+        "tags": [
+          "MilkProduction"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Request for milk price for a specific month",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "farmId": {
+                    "type": "string"
+                  },
+                  "month": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "farmId",
+                  "month"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Price for the month retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Farmer not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/priceForYear": {
+      "get": {
+        "summary": "Get Price for Year",
+        "operationId": "getPriceForYear",
+        "tags": [
+          "MilkProduction"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Request for milk price for a specific year",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "farmId": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "farmId",
+                  "year"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Price for the year retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "prices": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Farmer not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/factories": {
+      "post": {
+        "summary": "Create a Factory",
+        "operationId": "createFactory",
+        "tags": [
+          "Factory"
+        ],
+        "requestBody": {
+          "description": "Factory data to create a new factory",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -52,34 +728,115 @@
                   "name": {
                     "type": "string"
                   },
-                  "description": {
+                  "address": {
                     "type": "string"
                   },
-                  "price": {
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
                     "type": "number"
                   }
                 },
-                "example": {
-                  "name": "bicicleta",
-                  "description": "bicicleta legal",
-                  "price": 200
-                }
+                "required": [
+                  "name",
+                  "address",
+                  "latitude",
+                  "longitude"
+                ]
               }
             }
           }
         },
-        
-      "responses": {
-        "401": {
-          "description": "Unauthorized"
-        },
-        "400": {
-          "description": "this product already exist"
-        },
-        "200": {
-          "description": "OK"
+        "responses": {
+          "201": {
+            "description": "Factory created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
         }
       }
+    },
+    "/factories/{id}": {
+      "get": {
+        "summary": "Get Factory by ID",
+        "operationId": "getFactory",
+        "tags": [
+          "Factory"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Factory retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Factory not found"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
       }
     }
   }
