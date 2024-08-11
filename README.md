@@ -67,4 +67,3 @@ https://localhost:3003/api-docs/
 → BCRYPT;
 
 → Swagger;
-```
