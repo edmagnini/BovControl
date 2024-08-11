@@ -3,18 +3,20 @@ const { ObjectId } = require("mongodb")
 
 class FarmBaseDatabase {
     async createFarm(farm) {
-        const db = await connect();
-        return db.collection("farm").insertOne(farm);
-    }
-
-    async getFarmById(id) {
-
-        if (typeof id !== 'string' || !ObjectId.isValid(id)) {
-            throw new Error('Invalid ID format');
+        try {
+            const db = await connect();
+            return db.collection("farm").insertOne(farm);
+        } catch (error) {
+            throw new Error(error.message)
         }
-
-        const db = await connect();
-        return db.collection("farm").findOne({ _id: new ObjectId(id) })
+    }
+    async getFarmById(id) {
+        try {
+            const db = await connect();
+            return db.collection("farm").findOne({ _id: new ObjectId(id) })
+        } catch (error) {
+            throw new Error(error.message)
+        }
     }
 }
 

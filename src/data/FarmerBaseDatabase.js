@@ -4,18 +4,29 @@ const { ObjectId } = require("mongodb")
 
 class FarmerBaseDatabase {
     async createFarmer(farmer) {
-        const db = await connect();
-        return db.collection("farmer").insertOne(farmer);
+        try {
+            const db = await connect();
+            return db.collection("farmer").insertOne(farmer);
+        } catch (error) {
+            throw new Error(error.message)
+        }
     }
 
     async getFarmerById(id) {
-
-        if (typeof id !== 'string' || !ObjectId.isValid(id)) {
-            throw new Error('Invalid ID format');
+        try {
+            const db = await connect();
+            return db.collection("farmer").findOne({ _id: new ObjectId(id) })
+        } catch (error) {
+            throw new Error(error.message)
         }
-
-        const db = await connect();
-        return db.collection("farmer").findOne({ _id: new ObjectId(id) })
+    }
+    async getFarmerByEmail(email) {
+        try {
+            const db = await connect();
+            return db.collection("farmer").findOne({ email })
+        } catch (error) {
+            throw new Error(error.message)
+        }
     }
 }
 

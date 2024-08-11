@@ -1,6 +1,7 @@
-import bcrypt from "bcryptjs/dist/bcrypt";
+const bcrypt = require("bcryptjs/dist/bcrypt");
+require('dotenv').config();
 
-export class HashManager {
+class HashManager {
 
     hash = async (
         plainText
@@ -15,3 +16,5 @@ export class HashManager {
         return bcrypt.compare(plainText, cypherText)
     }
 }
+
+module.exports = HashManager

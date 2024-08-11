@@ -3,14 +3,14 @@ class Farm {
         name,
         farmCode,
         farmer,
-        addres,
+        address,
         latitude,
         longitude
     ) {
         this.name = name;
         this.farmCode = farmCode;
         this.farmer = farmer;
-        this.addres = addres
+        this.address = address
         this.latitude = latitude;
         this.longitude = longitude;
     }

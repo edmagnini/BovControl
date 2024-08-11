@@ -1,20 +1,21 @@
 const { connect } = require("./index");
 const { ObjectId } = require("mongodb")
-
 class FactoryBaseDatabase {
     async createFactory(factory) {
-        const db = await connect();
-        return db.collection("factory").insertOne(factory);
-    }
-
-    async getFactoryById(id) {
-
-        if (typeof id !== 'string' || !ObjectId.isValid(id)) {
-            throw new Error('Invalid ID format');
+        try {
+            const db = await connect();
+            return db.collection("factory").insertOne(factory);
+        } catch (error) {
+            throw new Error(error.message)
         }
-
-        const db = await connect();
-        return db.collection("factory").findOne({ _id: new ObjectId(id) })
+    }
+    async getFactoryById(id) {
+        try {
+            const db = await connect();
+            return db.collection("factory").findOne({ _id: new ObjectId(id) })
+        } catch (error) {
+            throw new Error(error.message)
+        }
     }
 }
 
