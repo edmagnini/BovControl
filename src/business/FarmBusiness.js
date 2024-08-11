@@ -25,7 +25,8 @@ class FarmBusiness {
         }
         return this.farmBaseDatabase.createFarm(farm);
     }
-    async getFarm(id) {
+    async getFarm(poyload) {
+        const { id } = poyload
         if (typeof id !== 'string') {
             throw new CustomError(422, 'Invalid ID format');
         }

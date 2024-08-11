@@ -109,7 +109,6 @@ class MilkProductionBusiness {
                 throw new Error("Farm not found");
             }
             const currentMonth = new Date().getMonth() + 1;
-            console.log(currentMonth)
             const inputMonth = parseInt(month, 10);
             if (inputMonth > currentMonth) {
                 throw new CustomError(422, "Date can not be greater than today");

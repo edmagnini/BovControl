@@ -30,7 +30,6 @@ class FarmerController {
             const farmer = await this.farmerBusiness.loginFarmer(req.body);
             res.status(200).send(farmer);
         } catch (error) {
-            console.log(error)
             const { statusCode, message } = error
             res.status(statusCode || 400).send({ message })
         }
